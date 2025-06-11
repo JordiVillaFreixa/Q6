@@ -2,7 +2,7 @@
 ! free energy calculations, including empirical valence bond simulations, 
 ! linear interaction energy calculations, and free energy perturbation.
 ! 
-! Copyright © 2017 Johan Åqvist, John Marelius, Shina Caroline Lynn Kamerlin and Paul Bauer
+! Copyright ï¿½ 2017 Johan ï¿½qvist, John Marelius, Shina Caroline Lynn Kamerlin and Paul Bauer
 ! 
 ! This program is free software; you can redistribute it and/or modify it under the 
 ! terms of the GNU General Public License as published by the Free 
@@ -20,7 +20,7 @@
 ! simprep.f90
 ! based on
 ! md.f90
-! by Johan Åqvist, John Marelius, Anders Kaplan, Isabella Feierberg, Martin Nervall & Martin Almlöf
+! by Johan ï¿½qvist, John Marelius, Anders Kaplan, Isabella Feierberg, Martin Nervall & Martin Almlï¿½f
 ! general simulation setup 
 
 module SIMPREP
@@ -2505,7 +2505,7 @@ end do
 end subroutine maxwell
 
 !-----------------------------------------------------------------------
-! Subroutine for the Nosé-Hoover chain propagation
+! Subroutine for the Nosï¿½-Hoover chain propagation
 subroutine nh_prop
 
 real(kind=prec)				:: dt4, dt8, expf, s
@@ -3658,13 +3658,17 @@ if(nwat > 0) then
 end if
 ! set the charge group membership for every topology atom only if using LRF or PBC
 if(use_LRF .or. use_PBC) then
+        write(*,*) 'JVF iwhich_cgp check1:',ncgp,iwhich_cgp
         call allocate_lrf_arrays
+
+        write(*,*) 'JVF iwhich_cgp check2:',ncgp,iwhich_cgp
 
         do ig = 1, ncgp
                 do i = cgp(ig)%first, cgp(ig)%last
                         iwhich_cgp(cgpatom(i)) = ig
                 end do
         end do
+        write(*,*) 'JVF iwhich_cgp check3:',ncgp,iwhich_cgp
 !set nsolvent and nsolute to values from topology
 !for box control later
 	nsolvent = nres - nres_solute
@@ -3708,7 +3712,7 @@ if( use_PBC ) then
         end if
 end if
 
-!initialization for the Nosé-Hoover chain thermostat
+!initialization for the Nosï¿½-Hoover chain thermostat
 !is done after shake has started, here shake_constraints are still zero
 
 !scale charges by sqrt(coulomb_constant) 

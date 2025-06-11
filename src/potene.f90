@@ -2,7 +2,7 @@
 ! free energy calculations, including empirical valence bond simulations, 
 ! linear interaction energy calculations, and free energy perturbation.
 ! 
-! Copyright © 2017 Johan Åqvist, John Marelius, Shina Caroline Lynn Kamerlin and Paul Bauer
+! Copyright ï¿½ 2017 Johan ï¿½qvist, John Marelius, Shina Caroline Lynn Kamerlin and Paul Bauer
 ! 
 ! This program is free software; you can redistribute it and/or modify it under the 
 ! terms of the GNU General Public License as published by the Free 
@@ -19,7 +19,7 @@
 ! how to contact you by electronic and paper mail.
 ! potene.f90 
 ! based on md.f90
-! by Johan Åqvist, John Marelius, Anders Kaplan, Isabella Feierberg, Martin Nervall & Martin Almlöf
+! by Johan ï¿½qvist, John Marelius, Anders Kaplan, Isabella Feierberg, Martin Nervall & Martin Almlï¿½f
 ! wrapper for all potential energy calculation
 ! by Paul Bauer
 
@@ -115,6 +115,7 @@ d(:) = zero
 if (nodeid .eq. 0) then
 !First post recieves for gathering data from slaves
 call gather_nonbond(E_loc,EQ_loc(:))
+
 end if
 #endif
 
@@ -126,7 +127,11 @@ start_loop_time2 = rtime()
 #ifdef DEBUG
 call q_vecsum(d,nat_pro,'Initial')
 #endif
+  write(*,'(a)')   'JVF check pot energy nonbond a'
+
 call pot_energy_nonbonds(E_loc,EQ_loc(:),in_md)
+  write(*,'(a)')   'JVF check pot energy nonbond b'
+
 #ifdef DEBUG
 call q_vecsum(d,nat_pro,'Classical Nonbonded')
 #endif
@@ -357,6 +362,9 @@ call q_vecsum(d,nat_pro,'Nonbond qw')
                 else
                         call nonbond_qw(EQ_loc(:)%qw,EQ_loc(:)%lambda)
                         if(md) call nonbond_ww(E_loc%ww)
+#ifdef DEBUG
+call q_vecsum(d,nat_pro,'Nonbond ww')
+#endif
                 end if
 ! now we get started on the funky stuff with solvent torsions
 ! only run this if we have torsions in the solvent
@@ -365,9 +373,18 @@ call q_vecsum(d,nat_pro,'Nonbond qw')
                         call nonbond_solvent_internal(E_loc%ww)
                 end if
                 if(md) call nonbond_pw(E_loc%pw)
+#ifdef DEBUG
+call q_vecsum(d,nat_pro,'Nonbond pw')
+#endif           
         end if
         if(md) call nonbond_pp(E_loc%pp)
+#ifdef DEBUG
+call q_vecsum(d,nat_pro,'Nonbond pp')
+#endif 
         call nonbond_qp(EQ_loc(:)%qp,EQ_loc(:)%lambda)
+#ifdef DEBUG
+call q_vecsum(d,nat_pro,'Nonbond qp')
+#endif 
 end if
 
 !LRF
@@ -375,8 +392,13 @@ end if
 if (use_LRF.and.md) then
         call lrf_taylor(E_loc%lrf)
 end if
+#ifdef DEBUG
+call q_vecsum(d,nat_pro,'LRF')
+#endif 
 !$omp end single
 !$omp end parallel
+write(*,'(a)')   'JVF exiting pot_energy_nonbonds '
+
 end subroutine pot_energy_nonbonds
 
 !-----------------------------------------------------------------------

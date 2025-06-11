@@ -2,7 +2,7 @@
 ! free energy calculations, including empirical valence bond simulations, 
 ! linear interaction energy calculations, and free energy perturbation.
 ! 
-! Copyright © 2017 Johan Åqvist, John Marelius, Shina Caroline Lynn Kamerlin and Paul Bauer
+! Copyright ï¿½ 2017 Johan ï¿½qvist, John Marelius, Shina Caroline Lynn Kamerlin and Paul Bauer
 ! 
 ! This program is free software; you can redistribute it and/or modify it under the 
 ! terms of the GNU General Public License as published by the Free 
@@ -19,7 +19,7 @@
 ! how to contact you by electronic and paper mail.
 ! nonbondene.f90 
 ! based on md.f90
-! by Johan Åqvist, John Marelius, Anders Kaplan, Isabella Feierberg, Martin Nervall & Martin Almlöf
+! by Johan ï¿½qvist, John Marelius, Anders Kaplan, Isabella Feierberg, Martin Nervall & Martin Almlï¿½f
 ! calculation of nonbonded energies and list generation
 ! by Paul Bauer
 
@@ -512,6 +512,7 @@ integer						::	i,ic
 real(kind=prec)						::	Vij
 TYPE(qr_vec)                                            :: dr,df,tmp
 
+write(*,*) 'JVF iqatom:',iqatom
 ! global variables used:
 !  E%LRF, natom, excl, iqatom, iwhich_cgp, lrf, x, crg, d
 ! change to use the calculation_assignment%natom variable
@@ -519,13 +520,18 @@ TYPE(qr_vec)                                            :: dr,df,tmp
 do i = calculation_assignment%natom%start, calculation_assignment%natom%end
 ! for every atom on this node:
 
+write(*,*) 'JVF data LRF A',i,iqatom(i),excl(i)
+
 if ( ( use_PBC .and. (iqatom(i)==0) ) .or. ( (.not. excl(i) ) .and. (iqatom(i)==0) ) ) then
 ! unless excluded atom or q-atom:
+write(*,*) 'JVF data LRF B',iwhich_cgp(i)
 
 ! find the displacement dr from the center of the charge group
 ic = iwhich_cgp(i)
 
+
 dr = lrf(ic)%cgp_cent - x(i)
+write(*,*) 'JVF data LRF B2',ic,dr
 
 ! --- Electric potential
 tmp%x = q_dotprod(dr,lrf(ic)%phi2(1))
@@ -536,7 +542,11 @@ Vij=lrf(ic)%phi0 + &
         q_dotprod(dr,lrf(ic)%phi1) + &
         0.5_prec*q_dotprod(dr,tmp)
 
+
+
 LRF_loc = LRF_loc + 0.5_prec * crg(i) * Vij
+
+write(*,*) 'JVF data LRF B3',Vij,crg(i),LRF_loc
 
 ! --- Electric field
 tmp%x = q_dotprod(dr,lrf(ic)%phi3(1))
@@ -562,7 +572,7 @@ tmp%z = q_dotprod(dr,lrf(ic)%phi3(9))
 df%z = lrf(ic)%phi1%z + &
         q_dotprod(dr,lrf(ic)%phi2(3)) + &
         0.5_prec*q_dotprod(dr,tmp)
-
+write(*,*) 'JVF data LRF C'
 ! update d
 d(i) = d(i) - df * crg(i)
 end if
@@ -762,7 +772,7 @@ start_loop_time = rtime()
 ! to do this in every function
 
 !$omp parallel default(none) shared(use_PBC,use_LRF,iuse_switch_atom) 
-
+write(*,'(a)')   'JVF check'
 #ifdef USE_GRID
 call populate_grids
 #endif
@@ -807,21 +817,28 @@ if(.not. use_LRF) then
         end if
         call nbwwlist(Rcww2)
 else 
+write(*,'(a)')   'JVF check 2'
         ! cutoff with lrf
-        call cgp_centers ! *** måste anropas av alla noder (nollställer lrf)
+        call cgp_centers ! *** mï¿½ste anropas av alla noder (nollstï¿½ller lrf)
         if( iuse_switch_atom .eq. 1 ) then
+        write(*,'(a)')   'JVF check 3'
                 call nbpplist_lrf(Rcpp2,RcLRF2)
                 call nbpwlist_lrf(Rcpw2,RcLRF2)
                 call nbqplist(Rcq2)
         else
+        write(*,'(a)')   'JVF check 4'
                 call nbpplis2_lrf(Rcpp2,RcLRF2)
                 call nbpwlis2_lrf(Rcpw2,RcLRF2)
                 call nbqplis2(Rcq2)
         end if
+                write(*,'(a)')   'JVF check 5a'
         call nbwwlist_lrf(Rcww2,RcLRF2)
-end if
+          write(*,'(a)')   'JVF check 5b'
 
+end if
+write(*,'(a)')   'JVF check 6'
 call nbqwlist(Rcq2)
+write(*,'(a)')   'JVF check 7'
 end if
 
 !$omp end parallel
@@ -833,6 +850,7 @@ if (use_LRF) call lrf_gather
 #if defined (PROFILING)
 profile(1)%time = profile(1)%time + rtime() - start_loop_time
 #endif
+write(*,'(a)')   'JVF check 8'
 
 end subroutine make_pair_lists
 !-----------------------------------------------------------------------

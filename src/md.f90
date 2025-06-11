@@ -2,7 +2,7 @@
 ! free energy calculations, including empirical valence bond simulations, 
 ! linear interaction energy calculations, and free energy perturbation.
 ! 
-! Copyright © 2017 Johan Åqvist, John Marelius, Shina Caroline Lynn Kamerlin and Paul Bauer
+! Copyright ï¿½ 2017 Johan ï¿½qvist, John Marelius, Shina Caroline Lynn Kamerlin and Paul Bauer
 ! 
 ! This program is free software; you can redistribute it and/or modify it under the 
 ! terms of the GNU General Public License as published by the Free 
@@ -18,7 +18,7 @@
 ! Street, Fifth Floor, Boston, MA  02110-1301, USA. Also add information on 
 ! how to contact you by electronic and paper mail.
 ! md.f90
-! by Johan Åqvist, John Marelius, Anders Kaplan, Isabella Feierberg, Martin Nervall & Martin Almlöf
+! by Johan ï¿½qvist, John Marelius, Anders Kaplan, Isabella Feierberg, Martin Nervall & Martin Almlï¿½f
 ! molecular dynamics
 
 module MD
@@ -1686,9 +1686,12 @@ if ( mod(istep, NBcycle) .eq. 0 ) then
 #endif
         ! update lists of nonbonded interaction pairs
         if (nodeid .eq. 0) then
-           call centered_heading('Nonbonded pair list generation', '-')
+           call centered_heading('Nonbonded pair list generation 2', '-')
         end if
+        write(*,'(a)')   'JVF check 11a md.f90'
         call make_pair_lists(Rcq,Rcq**2,RcLRF**2,Rcpp**2,Rcpw**2,Rcww**2)
+        write(*,'(a)')   'JVF check 11b md.f90'
+
 #if defined(DUMP)
                         write(*,332) 'solute-solute', 'solute-water', 'water-water', 'Q-solute', 'Q-water'
                         write(*,333) nodeid, 'count', nbpp_pair, nbpw_pair, &
@@ -1739,7 +1742,9 @@ end if ! every NBcycle steps
 
 
 ! get potential energy and derivatives from FF
+  write(*,'(a)')   'JVF check pot energy a'
 call pot_energy(E,EQ,.true.)
+  write(*,'(a)')   'JVF check pot energy b'
 ! if we have reached the ene write out, also calculate group contribution
 ! exclusions and qcp if needed
 ! exc are only done on master, while qcp is spread to nodes
@@ -1888,7 +1893,9 @@ end if
 #endif
 
         ! write output for final step and final coords
+write(*,'(a)')   'JVF check 9 md.f90'
 call make_pair_lists(Rcq,Rcq**2,RcLRF**2,Rcpp**2,Rcpw**2,Rcww**2)
+write(*,'(a)')   'JVF check 9 md.f90'
 call pot_energy(E,EQ,.true.)
 if (nodeid .eq. 0) then
         write(*,*)
@@ -2168,7 +2175,10 @@ call MPI_Bcast(inv_boxl, 1, mpitype_qrvec, 0, MPI_COMM_WORLD, ierr)
 
 !Need to update entire LRF... sigh
 if (use_LRF) then
+        write(*,'(a)')   'JVF check 10 md.f90'
         call make_pair_lists(Rcq,Rcq**2,RcLRF**2,Rcpp*2,Rcpw**2,Rcww**2)
+        write(*,'(a)')   'JVF check 10 md.f90'
+
 end if !use_LRF
 
 

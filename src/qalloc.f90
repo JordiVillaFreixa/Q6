@@ -2,7 +2,7 @@
 ! free energy calculations, including empirical valence bond simulations, 
 ! linear interaction energy calculations, and free energy perturbation.
 ! 
-! Copyright © 2017 Johan Åqvist, John Marelius, Shina Caroline Lynn Kamerlin and Paul Bauer
+! Copyright ï¿½ 2017 Johan ï¿½qvist, John Marelius, Shina Caroline Lynn Kamerlin and Paul Bauer
 ! 
 ! This program is free software; you can redistribute it and/or modify it under the 
 ! terms of the GNU General Public License as published by the Free 
@@ -20,7 +20,7 @@
 ! qalloc.f90
 ! based on
 ! md.f90
-! by Johan Åqvist, John Marelius, Anders Kaplan, Isabella Feierberg, Martin Nervall & Martin Almlöf
+! by Johan ï¿½qvist, John Marelius, Anders Kaplan, Isabella Feierberg, Martin Nervall & Martin Almlï¿½f
 ! memory management
 
 module QALLOC
@@ -100,7 +100,7 @@ call check_alloc('atom data arrays')
 end subroutine allocate_natom_arrays
 
 !----------------------------------------------------------------------
-!Allocate arrays to be used for the Nosé-Hoover thermostat
+!Allocate arrays to be used for the Nosï¿½-Hoover thermostat
 subroutine allocate_nhchain_arrays
 
 allocate(xnh(numchain), &
@@ -132,6 +132,7 @@ subroutine allocate_lrf_arrays
 if (use_PBC .and. constant_pressure) then
 	allocate(iwhich_cgp(natom), lrf(ncgp), old_lrf(ncgp), stat=alloc_status)
 else
+        write(*,*) 'JVF a qalloc: natom,ncgp',natom,ncgp
 	allocate(iwhich_cgp(natom), lrf(ncgp), stat=alloc_status)
 end if
 call check_alloc('LRF arrays')
@@ -264,7 +265,7 @@ if(allocated(bLJ_solv)) deallocate(bLJ_solv)
 if(allocated(chg_solv)) deallocate(chg_solv)
 if(allocated(nonbnd_solv_int)) deallocate(nonbnd_solv_int)
 if(allocated(is_heavy_solv)) deallocate(is_heavy_solv)
-! Nosé-Hoover array
+! Nosï¿½-Hoover array
 if ( thermostat == NOSEHOOVER) then
 deallocate (xnh, stat=alloc_status)
 deallocate (vnh, stat=alloc_status)

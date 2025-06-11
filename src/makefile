@@ -457,17 +457,17 @@ version.o: version.f90
 	${FC} ${FFLAGS} ${FPP_FLG} ${BUILD_NUMBER_LDFLAGS} -c $<
 
 moveqdyn:
-	mkdir -p ../bin ; mv Qdyn6 ../bin/
+	mkdir -p ../bin ; cp Qdyn6 ../bin/
 move1:
-	mkdir -p ../obj ; mv *.o *.mod ../obj/
+	mkdir -p ../obj ; cp *.o *.mod ../obj/
 	@if ! test -f $(BUILD_NUMBER_FILE); then echo 0 > $(BUILD_NUMBER_FILE); fi
 	@echo $$(($$(cat $(BUILD_NUMBER_FILE)) + 1)) > $(BUILD_NUMBER_FILE)
 
 move2:
-	mkdir -p ../bin ; mv Qfep6 Qprep6 Qdum6 Qcalc6 Qpi6 ../bin/
+	mkdir -p ../bin ; cp Qfep6 Qprep6 Qdum6 Qcalc6 Qpi6 ../bin/
 
 move3:
-	mkdir -p ../bin ; mv Qdyn6p Qpi6p ../bin/
+	mkdir -p ../bin ; cp Qdyn6p Qpi6p ../bin/
 
 
 

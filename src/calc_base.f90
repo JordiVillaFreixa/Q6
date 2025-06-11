@@ -56,6 +56,7 @@ if(.not. qatom_load_atoms(fep_file)) then
         call die_general('failure to load Q-atoms from FEP file.')
 end if
 
+
 ! set flags
 do i=1,nqat
         if(iqseq(i) > 0 .and. iqseq(i) <= nat_solute)  then
@@ -67,6 +68,9 @@ do i=1,nqat
                 call die_general('invalid q-atom data')
         end if
 end do
+
+write(*,*) 'JVF iqatom a calc_base:',iqatom
+
 10	format('>>> WARNING: Q-atom no. ',i2,' is not associated with a topology atom.')
 20	format('>>>>> ERROR: Q-atom no. ',i2,' has invalid topology number ',i5)
 !allocate memory for qatom charges
